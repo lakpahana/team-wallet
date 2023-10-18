@@ -25,7 +25,7 @@ router.post('/v1/edit', apiAuth.validateToken, controller.editUser)
 router.delete('/v1/delete', apiAuth.validateToken,controller.deleteUser)
 
 
-router.post('/v1/updatePassword',apiAuth.validateToken, controller.updatePassword)
+// router.post('/v1/updatePassword',apiAuth.validateToken, controller.updatePassword)
 
 
 router.get('/v1/emailList',apiAuth.validateToken, controller.emailList)

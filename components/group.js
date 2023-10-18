@@ -52,9 +52,6 @@ exports.createGroup = async (req, res) => {
         })
     }
 }
-
-
-
 exports.viewGroup = async (req, res) => {
     try {
         const group = await model.Group.findOne({
@@ -76,8 +73,6 @@ exports.viewGroup = async (req, res) => {
         })
     }
 }
-
-
 exports.findUserGroup = async (req, res) => {
     try {
         const user = await model.User.findOne({
@@ -104,8 +99,6 @@ exports.findUserGroup = async (req, res) => {
         })
     }
 }
-
-
 exports.editGroup = async (req, res) => {
     try {
         var group = await model.Group.findOne({
@@ -175,8 +168,6 @@ exports.editGroup = async (req, res) => {
         })
     }
 }
-
-
 exports.deleteGroup = async (req, res) => {
     try {
         const group = await model.Group.findOne({
@@ -202,9 +193,6 @@ exports.deleteGroup = async (req, res) => {
         })
     }
 }
-
-
-
 exports.makeSettlement = async (req, res) => {
     try {
         var reqBody = new model.Settlement(req.body)
@@ -242,9 +230,6 @@ exports.makeSettlement = async (req, res) => {
         })
     }
 }
-
-
-
 exports.addSplit = async (groupId, expenseAmount, expenseOwner, expenseMembers) => {
     var group = await model.Group.findOne({
         _id: groupId
@@ -270,8 +255,6 @@ exports.addSplit = async (groupId, expenseAmount, expenseOwner, expenseMembers) 
         _id: groupId
     }, group)
 }
-
-
 exports.clearSplit = async (groupId, expenseAmount, expenseOwner, expenseMembers) => {
     var group = await model.Group.findOne({
         _id: groupId
