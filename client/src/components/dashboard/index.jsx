@@ -14,6 +14,10 @@ import { WelcomeMessage } from "./welcomeMessage"
 import { Link as RouterLink } from 'react-router-dom';
 import configData from '../../config.json'
 import AlertBanner from "../AlertBanner"
+import { set } from "mongoose"
+
+const profile = JSON.parse(localStorage.getItem('profile'))
+const emailId = profile?.emailId
 
 
 export default function Dashboard() {
@@ -23,6 +27,39 @@ export default function Dashboard() {
     const [alertMessage, setAlertMessage] = useState('');
     const [userExp, setUserExp] = useState()
     const [newUser, setNewUser] = useState(false)
+     const [group, setGroup] = useState([]);
+    const [totalOwed, setTotalOwed] = useState(0);
+    const [totalOwing, setTotalOwing] = useState(0);
+     const findUserSplit = (split) => {
+        if (split) {
+            split = split[0]
+            return split[emailId]
+        }
+        return 0
+    }
+
+    async function getUserTotalOwed(groups) 
+    {
+        
+        let totalOwed = 0;
+        let totalOwing = 0;
+        for (let i = 0; i < groups.length; i++) {
+            const group = groups[i];
+            const split = group.split
+            const userSplit = findUserSplit(split)
+            if (userSplit > 0) {
+                totalOwing += userSplit
+            } else {
+                totalOwed += userSplit
+            }
+        }
+
+        setTotalOwed(totalOwed)
+        setTotalOwing(totalOwing)
+        console.log(totalOwed, totalOwing)
+
+    }
+
 
     useEffect(() => {
         const getUserDetails = async () => {
@@ -33,8 +70,13 @@ export default function Dashboard() {
             const response_expense = await getUserExpenseService(userIdJson, setAlert, setAlertMessage)
             setUserExp(response_expense.data);
             const response_group = await getUserGroupsService(profile)
-            if (response_group.data.groups.length == 0)
+            if (response_group.data.groups.length == 0){
                 setNewUser(true)
+            }else{
+                // console.log(response_group.data.groups)
+                getUserTotalOwed(response_group.data.groups)
+                setGroup(response_group.data.groups)
+            }
             setLoading(false)
 
         }
@@ -104,9 +146,9 @@ export default function Dashboard() {
                                             </Grid>
                                         </Grid>
                                         <br></br>
-                                        <SummaryCards userTotalExp={userExp?.total} />
+                                        <SummaryCards isRed={true} userTotalExp={totalOwed} />
                                         <br></br>
-                                        <SummaryCards userTotalExp={userExp?.total} />
+                                        <SummaryCards userTotalExp={totalOwing} />
                                     <br></br>
                                              {!newUser &&   
                         

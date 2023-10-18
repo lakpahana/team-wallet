@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material"
 import { Link as RouterLink } from 'react-router-dom';
 import configData from '../../config.json'
+import { logout } from '../../services/auth';
 
 export const WelcomeMessage = () => {
     return (
@@ -29,6 +30,18 @@ export const WelcomeMessage = () => {
                             to={configData.USER_GROUPS_URL}
                         >
                             View Groups
+                        </Button>
+                        <Button variant="contained"
+                            sx={{
+                                ml:1
+                            }}
+                            onClick={()=>{
+                                logout();
+                                window.location.reload()
+                            }}
+                            
+                        >
+                           Logout
                         </Button>
                     </Grid>
                     <Grid item lg={5} md={6} xs={12}>

@@ -3,7 +3,7 @@ import React from 'react'
 import { convertToCurrency } from '../../utils/helper'
 import Iconify from '../Iconify'
 
-export const SummaryCards = ({ userTotalExp }) => {
+export const SummaryCards = ({ userTotalExp,isRed }) => {
     const LabelIconStyle = styled('div')(({ theme }) => ({
         borderRadius: 60,
         width: 60,
@@ -16,17 +16,19 @@ export const SummaryCards = ({ userTotalExp }) => {
              <Grid item xs={12} md={12}> {/*Change md to 4  */}
                 <Stack spacing={2} direction='row'
                     sx={{
-                        bgcolor: (theme) => theme.palette['primary'].lighter,
+                        bgcolor: (theme) => theme.palette[`${ isRed ? "error" : "success" }`].lighter,
                         borderRadius: 2,
                         p: 3
                     }}>
-                    <LabelIconStyle sx={{ bgcolor: (theme) => theme.palette['primary'].dark, py: '18px' }}>
-                        <Iconify icon=":nimbus:invoice" sx={{ width: '100%', height: '100%', color: 'white' }} />
+                    <LabelIconStyle sx={{ bgcolor: (theme) => theme.palette[`${ isRed ? "error" : "success" }`].dark, py: '18px' }}>
+                        <Iconify icon={
+                            isRed ? "mdi:cash-minus" : "mdi:cash-plus"
+                        } sx={{ width: '100%', height: '100%', color: 'white' }} />
                     </LabelIconStyle>
                     <Box>
                         <Typography variant="caption2"
                             sx={{ color: (theme) => theme.palette['primary'].dark }}>
-                            Total
+                            You {isRed ? 'are owing (you to others)' : 'are owed (others to you)'}
                         </Typography>
                         <Typography variant="h5"
                             sx={{ color: (theme) => theme.palette['primary'].darker }}>
