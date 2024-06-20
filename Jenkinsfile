@@ -34,14 +34,14 @@ pipeline {
         }
 
         
-        stage('Build Client') {
-      steps {
-        // Change to the client directory and run the build command
-        dir('client') {
-          sh 'npm run build'
-        }
-      }
-        }
+      //   stage('Build Client') {
+      // steps {
+      //   // Change to the client directory and run the build command
+      //   dir('client') {
+      //     sh 'npm run build'
+      //   }
+      // }
+      //   }
 
      
 
@@ -71,21 +71,28 @@ pipeline {
 
        }
 
-         stage("Build & Push Docker Image client") {
-            steps {
-                script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}-client"
-                    }
+	    stage("Build & Push Docker Image client") {
+    steps {
+        script {
+            // Set the directory path where the Dockerfile is located
+            def clientDir = 'client'
 
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
-                }
+            docker.withRegistry('', DOCKER_PASS) {
+                // Build the Docker image from the specified directory
+                docker_image = docker.build("${IMAGE_NAME}-client", clientDir)
             }
 
-       }
+            docker.withRegistry('', DOCKER_PASS) {
+                // Push the built image with specified tags
+                docker_image.push("${IMAGE_TAG}")
+                docker_image.push('latest')
+            }
+        }
+    }
+}
+
+
+         
     }
 
     post {
