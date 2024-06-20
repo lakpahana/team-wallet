@@ -24,6 +24,16 @@ pipeline {
       }
         }
 
+        
+        stage('Build Client') {
+      steps {
+        // Change to the client directory and run the build command
+        dir('client') {
+          sh 'npm run build'
+        }
+      }
+        }
+
      
 
         stage('Install Backend Dependencies') {
