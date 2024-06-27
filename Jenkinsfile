@@ -21,30 +21,7 @@ pipeline {
             }
         }
 
-        // stage('Install Client Dependencies') {
-        //     steps {
-        //         dir('client') {
-        //             sh 'npm install'
-        //         }
-        //     }
-        // }
-
-        // Uncomment if needed
-        // stage('Build Client') {
-        //     steps {
-        //         dir('client') {
-        //             sh 'npm run build'
-        //         }
-        //     }
-        // }
-
-        // stage('Install Backend Dependencies') {
-        //     steps {
-        //         dir('.') {
-        //             sh 'npm install'
-        //         }
-        //     }
-        // }
+  
 
         stage("Build & Push Docker Image backend") {
             steps {
@@ -78,31 +55,14 @@ pipeline {
             }
         }
 
-        // stage("Trivy Scan Client") {
-        //     steps {
-        //         script {
-        //             sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-client:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
-        //         }
-        //     }
-        // }
-
-        // stage("Trivy Scan Backend") { // Fixed stage name
-        //     steps {
-        //         script {
-        //             sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-back:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
-        //         }
-        //     }
-        // }
-
-  stage('Deploy with Docker Compose') {
+        stage('Deploy without Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    sh 'docker run -d -p 3002:3002 --name backend lakpahana/teamwallet-app-pipeline-back:latest'
+                    sh 'docker run -d -p 3000:3000 --name frontend --link backend:backend lakpahana/teamwallet-app-pipeline-client:latest'
                 }
             }
         }
-
-
         
         stage('Cleanup Artifacts') {
             steps {
