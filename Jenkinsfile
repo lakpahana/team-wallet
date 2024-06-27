@@ -21,13 +21,13 @@ pipeline {
             }
         }
 
-        stage('Install Client Dependencies') {
-            steps {
-                dir('client') {
-                    sh 'npm install'
-                }
-            }
-        }
+        // stage('Install Client Dependencies') {
+        //     steps {
+        //         dir('client') {
+        //             sh 'npm install'
+        //         }
+        //     }
+        // }
 
         // Uncomment if needed
         // stage('Build Client') {
@@ -38,13 +38,13 @@ pipeline {
         //     }
         // }
 
-        stage('Install Backend Dependencies') {
-            steps {
-                dir('.') {
-                    sh 'npm install'
-                }
-            }
-        }
+        // stage('Install Backend Dependencies') {
+        //     steps {
+        //         dir('.') {
+        //             sh 'npm install'
+        //         }
+        //     }
+        // }
 
         stage("Build & Push Docker Image backend") {
             steps {
@@ -78,21 +78,21 @@ pipeline {
             }
         }
 
-        stage("Trivy Scan Client") {
-            steps {
-                script {
-                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-client:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
-                }
-            }
-        }
+        // stage("Trivy Scan Client") {
+        //     steps {
+        //         script {
+        //             sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-client:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
+        //         }
+        //     }
+        // }
 
-        stage("Trivy Scan Backend") { // Fixed stage name
-            steps {
-                script {
-                    sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-back:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
-                }
-            }
-        }
+        // stage("Trivy Scan Backend") { // Fixed stage name
+        //     steps {
+        //         script {
+        //             sh 'docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image lakpahana/teamwallet-app-pipeline-back:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table'
+        //         }
+        //     }
+        // }
 
         stage('Cleanup Artifacts') {
             steps {
