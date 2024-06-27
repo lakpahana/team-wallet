@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'jenkin', url: 'https://github.com/lakpahana/team-wallet'
+                git branch: 'withCompose', url: 'https://github.com/lakpahana/team-wallet'
             }
         }
 
