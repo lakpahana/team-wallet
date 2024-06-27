@@ -2,14 +2,14 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./client
+    image: lakpahana/teamwallet-app-pipeline-client:latest
     ports:
       - "3000:3000"
     depends_on:
       - backend
 
   backend:
-    build: .
+    image: lakpahana/teamwallet-app-pipeline-back:latest
     ports:
       - "3002:3002"
     environment:
