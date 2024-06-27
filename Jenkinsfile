@@ -23,6 +23,7 @@ pipeline {
         git branch: 'jenkin', url: 'https://github.com/lakpahana/team-wallet'
       }
         }
+    }
 
         stage('Install Client Dependencies') {
       steps {
