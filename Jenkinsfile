@@ -44,7 +44,7 @@ pipeline {
         stage('Terraform Plan') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform plan -out=tfplan'
+                    sh 'terraform plan'
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform apply -auto-approve tfplan'
+                    sh 'terraform apply'
                 }
             }
         }
