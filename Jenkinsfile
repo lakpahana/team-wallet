@@ -23,61 +23,78 @@ pipeline {
             }
         }
 
-        stage("Build & Push Docker Image backend") {
-            steps {
-                script {
-                    docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
-                        docker_image = docker.build("${IMAGE_NAME}-back")
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
-                }
-            }
-        }
+        // stage("Build & Push Docker Image backend") {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
+        //                 docker_image = docker.build("${IMAGE_NAME}-back")
+        //                 docker_image.push("${IMAGE_TAG}")
+        //                 docker_image.push('latest')
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage("Build & Push Docker Image client") {
-            steps {
-                script {
-                    def clientDir = 'client'
-                    docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
-                        docker_image = docker.build("${IMAGE_NAME}-client", clientDir)
-                        docker_image.push("${IMAGE_TAG}")
-                        docker_image.push('latest')
-                    }
-                }
-            }
-        }
+        // stage("Build & Push Docker Image client") {
+        //     steps {
+        //         script {
+        //             def clientDir = 'client'
+        //             docker.withRegistry('', DOCKER_CREDENTIALS_ID) {
+        //                 docker_image = docker.build("${IMAGE_NAME}-client", clientDir)
+        //                 docker_image.push("${IMAGE_TAG}")
+        //                 docker_image.push('latest')
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Deploy without Docker Compose') {
-            steps {
-                script {
-                    sh 'docker stop backend || true'
-                    sh 'docker rm backend || true'
-                    sh 'docker stop frontend || true'
-                    sh 'docker rm frontend || true'
-                    sh 'docker run -d -p 3002:3002 --name backend ${IMAGE_NAME}-back:latest'
-                    sh 'docker run -d -p 3000:3000 --name frontend --link backend:backend ${IMAGE_NAME}-client:latest'
-                }
-            }
-        }
+        // stage('Deploy without Docker Compose') {
+        //     steps {
+        //         script {
+        //             sh 'docker stop backend || true'
+        //             sh 'docker rm backend || true'
+        //             sh 'docker stop frontend || true'
+        //             sh 'docker rm frontend || true'
+        //             sh 'docker run -d -p 3002:3002 --name backend ${IMAGE_NAME}-back:latest'
+        //             sh 'docker run -d -p 3000:3000 --name frontend --link backend:backend ${IMAGE_NAME}-client:latest'
+        //         }
+        //     }
+        // }
 
 
        
-        stage('Cleanup Artifacts') {
+        // stage('Cleanup Artifacts') {
+        //     steps {
+        //         script {
+        //             sh "docker rmi -f ${IMAGE_NAME}-client:${IMAGE_TAG}"
+        //             sh "docker rmi -f ${IMAGE_NAME}-client:latest"
+        //             sh "docker rmi -f ${IMAGE_NAME}-back:${IMAGE_TAG}"
+        //             sh "docker rmi -f ${IMAGE_NAME}-back:latest"
+        //         }
+        //     }
+        // }
+
+
+ stage('Log AWS Credentials') {
             steps {
                 script {
-                    sh "docker rmi -f ${IMAGE_NAME}-client:${IMAGE_TAG}"
-                    sh "docker rmi -f ${IMAGE_NAME}-client:latest"
-                    sh "docker rmi -f ${IMAGE_NAME}-back:${IMAGE_TAG}"
-                    sh "docker rmi -f ${IMAGE_NAME}-back:latest"
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+
+                     {
+                        echo "AWS_ACCESS_KEY_ID: ${env.AWS_ACCESS_KEY_ID}"
+                        echo "AWS_SECRET_ACCESS_KEY: ${env.AWS_SECRET_ACCESS_KEY}"
+                    }
                 }
             }
-        }
 
+ }
+ 
+        
 
          stage('Terraform Init') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+
                     script {
                         sh 'terraform init'
                     }
@@ -90,7 +107,8 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', password: 'AWS_SECRET_ACCESS_KEY')]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+
                     script {
                         sh 'terraform plan -out=tfplan'
                     }
@@ -104,7 +122,8 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+
                     script {
                         sh 'terraform apply -auto-approve'
                     }
