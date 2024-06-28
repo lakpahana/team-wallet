@@ -86,6 +86,7 @@ pipeline {
                     }
                 }
             }
+            }
 
  }
  
@@ -107,7 +108,8 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                {
 
                     script {
                         sh 'terraform plan -out=tfplan'
@@ -122,7 +124,8 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+           {
 
                     script {
                         sh 'terraform apply -auto-approve'
