@@ -1,8 +1,3 @@
-
-Pramitha Jayasooriya
-11:55 (0 minutes ago)
-to me
-
 pipeline {
     agent any
 
