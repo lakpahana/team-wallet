@@ -2,6 +2,7 @@ import axios from 'axios'
 
 
 //const API = axios.create({ baseURL: 'http://localhost:3001'})
+//fdfdf
 const API = axios.create({ baseURL: 'http://35.168.14.244:3002' })
 
 const profile = JSON.parse(localStorage.getItem('profile'))
