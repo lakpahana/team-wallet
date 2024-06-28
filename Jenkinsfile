@@ -33,29 +33,29 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform init'
-                }
-            }
-        }
+        // stage('Terraform Init') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        //             sh 'terraform init'
+        //         }
+        //     }
+        // }
 
-        stage('Terraform Plan') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform plan'
-                }
-            }
-        }
+        // stage('Terraform Plan') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        //             sh 'terraform plan'
+        //         }
+        //     }
+        // }
 
-        stage('Terraform Apply') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform apply -auto-approve'
-                }
-            }
-        }
+        // stage('Terraform Apply') {
+        //     steps {
+        //         withCredentials([usernamePassword(credentialsId: 'AMI', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+        //             sh 'terraform apply -auto-approve'
+        //         }
+        //     }
+        // }
 
         stage('Ansible Playbook') {
             steps {
