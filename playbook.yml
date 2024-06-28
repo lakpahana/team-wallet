@@ -1,0 +1,9 @@
+---
+- name: Configure DeployServer
+  hosts: deploy_server
+  become: yes
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
